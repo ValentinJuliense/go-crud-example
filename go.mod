@@ -1,4 +1,4 @@
-module github.com/maxilovera/go-crud-example
+module github.com/go-crud-example
 
 go 1.20
 

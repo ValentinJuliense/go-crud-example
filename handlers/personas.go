@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/maxilovera/go-crud-example/dto"
-	"github.com/maxilovera/go-crud-example/services"
+	"github.com/go-crud-example/dto"
+	"github.com/go-crud-example/services"
 )
 
 func ObtenerPersonas(c *gin.Context) {
@@ -48,4 +48,35 @@ func CrearPersona(c *gin.Context) {
 
 	//retornar la respuesta
 	c.JSON(http.StatusCreated, persona)
+}
+
+func ActualizarPersona(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Parametro ID no numerico"})
+
+		return
+	}
+
+	var nuevaPersona dto.Persona
+	if err := c.ShouldBindJSON(&nuevaPersona); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Datos de persona invalidos"})
+		return
+	}
+
+	persona := services.ActualizarPersona(id, &nuevaPersona)
+
+	c.JSON((http.StatusOK), persona)
+}
+
+func EliminarPersona(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Parametro ID no numerico"})
+		return
+	}
+
+	persona := services.EliminarPersona(id)
+	c.JSON((http.StatusOK), persona)
+
 }
